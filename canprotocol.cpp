@@ -127,6 +127,20 @@ CanProtocol &CanProtocol::makePresenceResponse()
     return *this;
 }
 
+const CanProtocol CanProtocol::getDataRequest()
+{
+    CanProtocol tmpReturn=*this;
+    tmpReturn.makeDataRequest();
+    return tmpReturn;
+}
+
+const CanProtocol CanProtocol::getPresenceResponse()
+{
+    CanProtocol tmpReturn=*this;
+    tmpReturn.makePresenceResponse();
+    return tmpReturn;
+}
+
 const QCanBusFrame &CanProtocol::getMsg() const
 {
     return *this;
@@ -134,7 +148,20 @@ const QCanBusFrame &CanProtocol::getMsg() const
 
 const QString CanProtocol::getMsgStr() const
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
     return getMsg().toString();
+#else
+    QString IdStr=QString::number(frameId(),16);
+    IdStr=QString("").fill(' ',8-IdStr.size())+IdStr;
+    QString PayloadStr;
+    for (quint8 i=0;i<payload().size();++i)
+    {
+        PayloadStr+=QStringLiteral(" ");
+        PayloadStr+=payload().mid(i,1).toHex();
+    }
+    return IdStr + QStringLiteral("   [") + QString::number(payload().size())
+            + QStringLiteral("]  ") + PayloadStr.trimmed().toUpper();
+#endif
 }
 
 const QString CanProtocol::getMsgType() const

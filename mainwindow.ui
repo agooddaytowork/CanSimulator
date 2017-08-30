@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>625</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,17 +19,17 @@
      <rect>
       <x>20</x>
       <y>30</y>
-      <width>42</width>
+      <width>71</width>
       <height>31</height>
      </rect>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_2">
+   <widget class="QSpinBox" name="spinBoxChID">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>100</x>
       <y>30</y>
-      <width>42</width>
+      <width>61</width>
       <height>31</height>
      </rect>
     </property>
@@ -38,9 +38,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>10</y>
-      <width>47</width>
-      <height>13</height>
+      <y>5</y>
+      <width>61</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -50,10 +50,10 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>10</y>
+      <x>110</x>
+      <y>5</y>
       <width>47</width>
-      <height>13</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -63,8 +63,8 @@
    <widget class="QPushButton" name="pushButtonForward">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>23</y>
+      <x>552</x>
+      <y>10</y>
       <width>31</width>
       <height>23</height>
      </rect>
@@ -76,8 +76,8 @@
    <widget class="QPushButton" name="pushButtonBackward">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>23</y>
+      <x>512</x>
+      <y>10</y>
       <width>31</width>
       <height>23</height>
      </rect>
@@ -89,34 +89,46 @@
    <widget class="QPlainTextEdit" name="plainTextEditRFID">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>168</x>
       <y>30</y>
-      <width>91</width>
+      <width>211</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
     <property name="plainText">
-     <string>1234567891</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>10</y>
+      <x>218</x>
+      <y>5</y>
       <width>47</width>
-      <height>13</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>RFID</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="checkBoxValveOpen">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>50</y>
+      <x>513</x>
+      <y>34</y>
       <width>70</width>
       <height>17</height>
      </rect>
@@ -124,13 +136,16 @@
     <property name="text">
      <string>ValveOpen</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pushButtonEditRFID">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>34</y>
-      <width>71</width>
+      <x>390</x>
+      <y>28</y>
+      <width>111</width>
       <height>23</height>
      </rect>
     </property>
@@ -143,8 +158,8 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>381</width>
-      <height>101</height>
+      <width>601</width>
+      <height>121</height>
      </rect>
     </property>
    </widget>
@@ -152,16 +167,16 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>180</y>
-      <width>381</width>
-      <height>111</height>
+      <y>200</y>
+      <width>601</width>
+      <height>131</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonClose">
     <property name="geometry">
      <rect>
-      <x>378</x>
+      <x>590</x>
       <y>7</y>
       <width>16</width>
       <height>16</height>

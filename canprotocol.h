@@ -29,6 +29,9 @@ public:
     CanProtocol &makeDataRequest();
     CanProtocol &makePresenceResponse();
 
+    const CanProtocol getDataRequest();
+    const CanProtocol getPresenceResponse();
+
     const QCanBusFrame &getMsg() const;
     const QString getMsgStr() const;
 

@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialbus
 CONFIG += -std=c++11 console
-TARGET = CanSimulator
+TARGET = CanSimulatorExec
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,13 +26,37 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    canprotocol.cpp
+    canprotocol.cpp \
+    CanBusWorker/canbusworker.cpp \
+    CanBusWorker/canbusworkerdb.cpp \
+    CanBusWorker/connectdevice.cpp \
+    CanBusWorker/createdevice.cpp \
+    CanBusWorker/deviceconnected.cpp \
+    CanBusWorker/directtransition.cpp \
+    CanBusWorker/framesent.cpp \
+    CanBusWorker/readframe.cpp \
+    CanBusWorker/waitforerrorhandler.cpp \
+    CanBusWorker/waitforpluginandinterface.cpp \
+    CanBusWorker/writeframe.cpp \
+    CanBusWorker/writeaframe.cpp
 
 HEADERS += \
         mainwindow.h \
     anlogger.h \
     canprotocol.h \
-    commonthings.h
+    commonthings.h \
+    CanBusWorker/canbusworker.h \
+    CanBusWorker/canbusworkerdb.h \
+    CanBusWorker/connectdevice.h \
+    CanBusWorker/createdevice.h \
+    CanBusWorker/deviceconnected.h \
+    CanBusWorker/directtransition.h \
+    CanBusWorker/framesent.h \
+    CanBusWorker/readframe.h \
+    CanBusWorker/waitforerrorhandler.h \
+    CanBusWorker/waitforpluginandinterface.h \
+    CanBusWorker/writeframe.h \
+    CanBusWorker/writeaframe.h
 
 FORMS += \
         mainwindow.ui
