@@ -23,9 +23,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 signals:
-    void ToCanBusWorker(QVariant *, QVariant * = Q_NULLPTR);
+    void ToCanBusWorker(QVariant, QVariant = QVariant());
 public slots:
-    void FromCanBusWorker(QVariant * enumVar, QVariant * dataVar = Q_NULLPTR);
+    void FromCanBusWorker(QVariant enumVar, QVariant dataVar = QVariant());
 private slots:
     void on_pushButtonClose_clicked();
 
@@ -39,7 +39,7 @@ private:
     void displayCurrentCP();
 
     Ui::MainWindow *ui;
-    QList<CanProtocol*> stations;
+    QList<CanProtocol*> * stations;
     CanProtocol * currentCP = Q_NULLPTR;
     quint8 currentCPIndex;
 

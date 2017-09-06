@@ -3,7 +3,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    stations(new QList<CanProtocol*>())
 {
     ui->setupUi(this);
     invoker.setParent(this);
@@ -22,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
             tmpTail.clear();
             tmpTail=QByteArray::fromHex(tmpRFID.toLocal8Bit());
             tmpTail<<quint16(0x0000)<<quint8((i%2)<<2);
-            stations.append(new CanProtocol((i<<4)|j,tmpTail));
+            stations->append(new CanProtocol((i<<4)|j,tmpTail));
         }
     }
     setCPNo(0);
@@ -41,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
         qApp->processEvents();
         while (!pendingSend.isEmpty())
         {
-            emit ToCanBusWorker(new QVariant(QVariant::fromValue(CanBusWorkerDB::addAFrameIntoPendingFrameList)),
-                                new QVariant(QVariant::fromValue(pendingSend.takeFirst())));
+            emit ToCanBusWorker(QVariant::fromValue(CanBusWorkerDB::addAFrameIntoPendingFrameList),
+                                QVariant::fromValue(pendingSend.takeFirst()));
         }
     });
     aThread->start();
@@ -51,44 +52,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete stations;
     delete ui;
 }
 
-void MainWindow::FromCanBusWorker(QVariant *enumVar, QVariant *dataVar)
+void MainWindow::FromCanBusWorker(QVariant enumVar, QVariant dataVar)
 {
     anTrk("From Can Bus");
-    QString enumVarTypeName(enumVar->typeName());
-    if (enumVarTypeName == QStringLiteral("CanBusWorkerDB::DataGet"))
+    QString enumVarTypeName(enumVar.typeName());
+    if (enumVarTypeName == QStringLiteral("CanBusWorkerDB::Data"))
     {
-        anAck("" + enumVarTypeName + " Parsed !");
-        switch (enumVar->toInt()) {
+        anAck(enumVarTypeName);
+        switch (enumVar.toInt()) {
         case CanBusWorkerDB::requestPluginAndInterface:
         {
-            anInfo("case CanBusWorkerDB::requestPluginAndInterface");
+            anInfo("requestPluginAndInterface");
             anAck("Plugin And Interface Info Replied !");
             CanBusWorkerDB::PluginNameAndInterfaceName tmp;
-            tmp.first = new QString("socketcan");
-            tmp.second = new QString("can0");
-            anInfo("plg:"<< *(tmp.first) <<",itf:"<< *(tmp.second));
-            emit ToCanBusWorker(new QVariant(QVariant::fromValue(CanBusWorkerDB::replyPluginAndInterface)),
-                                new QVariant(QVariant::fromValue(tmp)));
+            tmp.first = QStringLiteral("socketcan");
+            tmp.second = QStringLiteral("can0");
+            anInfo("plg:"<< tmp.first <<",itf:"<< tmp.second);
+            emit ToCanBusWorker(QVariant::fromValue(CanBusWorkerDB::replyPluginAndInterface),
+                                QVariant::fromValue(tmp));
             break;
         }
-        default:
-            break;
-        }
-    }
-    else if (enumVarTypeName == QStringLiteral("CanBusWorkerDB::DataSet"))
-    {
-        anAck("" + enumVarTypeName + " Parsed !");
-        switch (enumVar->toInt()) {
         case CanBusWorkerDB::replyCanFrameWithTimeStamp:
         {
-            anInfo("case CanBusWorkerDB::replyCanFrameWithTimeStamp");
+            anInfo("replyCanFrameWithTimeStamp");
             CanBusWorkerDB::CanBusFrameWithTimeStamp tmp =
-                    dataVar->value<CanBusWorkerDB::CanBusFrameWithTimeStamp>();
-            CanProtocol tmpCP(*(tmp.first));
-            ui->textEditReception->append(*(tmp.second) + " : " + tmpCP.getMsgStr());
+                    dataVar.value<CanBusWorkerDB::CanBusFrameWithTimeStamp>();
+            CanProtocol tmpCP(tmp.first);
+            ui->textEditReception->append(tmp.second + " : " + tmpCP.getMsgStr());
             QString tmpCPMsgMean=tmpCP.getMsgMean();
             anAck("Can Message Classified !");
             anInfo(tmpCPMsgMean);
@@ -103,7 +97,7 @@ void MainWindow::FromCanBusWorker(QVariant *enumVar, QVariant *dataVar)
             else if (tmpCPMsgMean==QStringLiteral("Data request"))
             {
                 quint8 currentSdcsIdInDataRequest = tmpCP.getSdcsId();
-                foreach (CanProtocol *tmpCanProtocol, stations)
+                foreach (CanProtocol *tmpCanProtocol, *stations)
                 {
                     if (tmpCanProtocol->getSdcsId()==currentSdcsIdInDataRequest)
                     {
@@ -124,24 +118,24 @@ void MainWindow::FromCanBusWorker(QVariant *enumVar, QVariant *dataVar)
     }
     else if (enumVarTypeName == QStringLiteral("CanBusWorkerDB::Notification"))
     {
-        anAck("" + enumVarTypeName + " Parsed !");
-        switch (enumVar->toInt()) {
+        anAck(enumVarTypeName);
+        switch (enumVar.toInt()) {
         case CanBusWorkerDB::CanFrameTransmitted:
         {
-            anInfo("case CanBusWorkerDB::CanFrameTransmitted");
-            QCanBusFrame tmp = dataVar->value<QCanBusFrame>();
+            anInfo("CanFrameTransmitted");
+            QCanBusFrame tmp = dataVar.value<QCanBusFrame>();
             ui->textEditTransmission->append(CanProtocol(tmp).getMsgStr());
             break;
         }
         case CanBusWorkerDB::DeviceCreated:
         {
-            anInfo("case CanBusWorkerDB::DeviceCreated");
+            anInfo("DeviceCreated");
             ui->textEditTransmission->append("=> Device Created !");
             break;
         }
         case CanBusWorkerDB::DeviceConnected:
         {
-            anInfo("case CanBusWorkerDB::DeviceConnected");
+            anInfo("DeviceConnected");
             ui->textEditTransmission->append("=> Device Connected !");
             break;
         }
@@ -151,39 +145,18 @@ void MainWindow::FromCanBusWorker(QVariant *enumVar, QVariant *dataVar)
     }
     else if (enumVarTypeName == QStringLiteral("CanBusWorkerDB::Error"))
     {
-        anAck("" + enumVarTypeName + " Parsed !");
-        QString errorInfo = dataVar->value<QString>();
-        switch (enumVar->toInt()) {
-        case CanBusWorkerDB::DeviceCreationFailed:
+        anAck(enumVarTypeName);
+        ui->textEditReception->append(QString(CanBusWorkerDB::ErrorMetaEnum.valueToKey(enumVar.toInt())));
+        if (!dataVar.isNull())
         {
-            anInfo("case CanBusWorkerDB::DeviceCreationFailed");
-            ui->textEditTransmission->append("=> Failed To Create Device !");
-            break;
+            ui->textEditReception->append(dataVar.value<QString>());
         }
-        case CanBusWorkerDB::DeviceError:
-        {
-            anInfo("case CanBusWorkerDB::DeviceError");
-            ui->textEditTransmission->append("=> Device Error Occurred !");
-            break;
-        }
-        default:
-            break;
-        }
-        if (errorInfo.size()>1)
-            ui->textEditTransmission->append("   Error: " + errorInfo);
-    }
-    delete enumVar;
-    enumVar = Q_NULLPTR;
-    if (dataVar)
-    {
-        delete dataVar;
-        dataVar = Q_NULLPTR;
     }
 }
 
 void MainWindow::on_pushButtonClose_clicked()
 {
-    qApp->exit();
+    qApp->quit();
 }
 
 void MainWindow::on_pushButtonForward_clicked()
@@ -195,10 +168,10 @@ void MainWindow::on_pushButtonForward_clicked()
 
 bool MainWindow::setCPNo(quint8 anIndex)
 {
-    if (anIndex<=(stations.size()-1))
+    if (anIndex<=(stations->size()-1))
     {
         currentCPIndex=anIndex;
-        currentCP=stations.at(anIndex);
+        currentCP=stations->at(anIndex);
         return true;
     }
     return false;
@@ -216,7 +189,7 @@ void MainWindow::displayCurrentCP()
 void MainWindow::on_pushButtonBackward_clicked()
 {
     if (!setCPNo(currentCPIndex-1))
-        setCPNo(stations.size()-1);
+        setCPNo(stations->size()-1);
     displayCurrentCP();
 }
 
@@ -235,9 +208,8 @@ void MainWindow::on_pushButtonEditRFID_clicked()
             anInfo("Old Info: " << currentCP->getMsgStr());
             currentCP->setRFID(QByteArray::fromHex(ui->plainTextEditRFID->toPlainText().toLocal8Bit()));
             anInfo("New Info: " << currentCP->getMsgStr());
-            anAck("RFID Change Notification Emitted !");
-            emit ToCanBusWorker(new QVariant(QVariant::fromValue(CanBusWorkerDB::addAFrameIntoPendingFrameList)),
-                                new QVariant(QVariant::fromValue(currentCP->getMsg())));
+            anAck("RFID Change Notification Queued !");
+            pendingSend.append(currentCP->getMsg());
         }
         else
         {
