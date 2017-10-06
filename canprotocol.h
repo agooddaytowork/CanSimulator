@@ -13,17 +13,17 @@ class CanProtocol : public QCanBusFrame
 public:
 
     explicit CanProtocol();
-    explicit CanProtocol(quint8 identifier, const QByteArray &data);
+    explicit CanProtocol(const quint8 &identifier, const QByteArray &data);
     explicit CanProtocol(const QCanBusFrame &CanMsg);
 
     void operator=(const QCanBusFrame &CanMsg);
 
     bool IsOfRightFormat() const;
 
-    CanProtocol &setSdcsId(const quint8 sdcsid);
-    CanProtocol &setChId(const quint8 chid);
+    CanProtocol &setSdcsId(const quint8 &sdcsid);
+    CanProtocol &setChId(const quint8 &chid);
     CanProtocol &setRFID(const QByteArray &rfid);
-    CanProtocol &setValveControl(const bool SetBit,const bool ResetBit);
+    CanProtocol &setValveControl(const bool &SetBit,const bool &ResetBit);
     CanProtocol &setValveOn();
     CanProtocol &setValveOff();
     CanProtocol &makeDataRequest();
@@ -43,11 +43,13 @@ public:
     const QByteArray getRFID() const;
     quint8 getValveControl() const;
     quint8 getValveStatus() const;
+    bool getValveControlSetBit() const;
+    bool getValveControlResetBit() const;
 
 
-    static const CanProtocol PresenceRequest;
-    static const CanProtocol &DataRequest(const quint8 sdcsid);
-    static const CanProtocol &PresenceResponse(const quint8 sdcsid);
+    static const CanProtocol &PresenceRequest;
+    static const CanProtocol &DataRequest(const quint8 &sdcsid);
+    static const CanProtocol &PresenceResponse(const quint8 &sdcsid);
 };
 
 #endif // CANPROTOCOL_H

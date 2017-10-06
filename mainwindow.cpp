@@ -18,11 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             tmpRFID.clear();
             tmpRFID ="a" + QString::number(i) + "b" + QString::number(j)
-                    +"c" + QString::number(i) + "d" + QString::number(j)
-                    +"e" + QString::number(i);
+                    +"c" + QString::number(i) + "d" + QString::number(j);
             tmpTail.clear();
             tmpTail=QByteArray::fromHex(tmpRFID.toLocal8Bit());
-            tmpTail<<quint16(0x0000)<<quint8((i%2)<<2);
+            tmpTail<<quint16(0x0000)<<quint8(0x00)<<quint8((i%2)<<2);
             stations->append(new CanProtocol((i<<4)|j,tmpTail));
         }
     }
@@ -202,7 +201,7 @@ void MainWindow::on_pushButtonEditRFID_clicked()
     }
     else if (ui->pushButtonEditRFID->text()=="Save")
     {
-        if (ui->plainTextEditRFID->toPlainText().size()<=10)
+        if (ui->plainTextEditRFID->toPlainText().size()<=8)
         {
             anAck("RFID Changed !");
             anInfo("Old Info: " << currentCP->getMsgStr());
