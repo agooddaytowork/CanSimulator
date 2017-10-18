@@ -4,12 +4,11 @@
 #include <QThread>
 #include <QMainWindow>
 #include <QMessageBox>
-#include "CanBusWorker/canbusworker.h"
 #include <QTextStream>
-#include "canprotocol.h"
-#include "anlogger.h"
-#include "commonthings.h"
-#include <QTimer>
+#include "shared/commonthings.h"
+#include "anLogger/src/anlogger.h"
+#include "CanProtocol/src/canprotocol.h"
+#include "CanBusWorker/src/canbusworker.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,9 +22,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 signals:
-    void ToCanBusWorker(QVariant, QVariant = QVariant());
+    void ToCanBusWorker(const GlobalSignal &);
 public slots:
-    void FromCanBusWorker(QVariant enumVar, QVariant dataVar = QVariant());
+    void FromCanBusWorker(const GlobalSignal &aGlobalSignal);
 private slots:
     void on_pushButtonClose_clicked();
 
@@ -39,13 +38,9 @@ private:
     void displayCurrentCP();
 
     Ui::MainWindow *ui;
-    QList<CanProtocol*> * stations;
-    CanProtocol * currentCP = Q_NULLPTR;
+    QList<CanProtocol> stations;
+    CanProtocol * currentCP = nullptr;
     quint8 currentCPIndex;
-
-    QList<QCanBusFrame> pendingSend;
-
-    QTimer invoker;
 };
 
 #endif // MAINWINDOW_H

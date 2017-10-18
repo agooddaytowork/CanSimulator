@@ -1,11 +1,11 @@
 #ifndef CANPROTOCOL_H
 #define CANPROTOCOL_H
-#define CanPtcDbgEn 0
+#define CanPtcDbgEn 1
 
 #include <QCanBusFrame>
 #include <QByteArray>
-#include "anlogger.h"
-#include "commonthings.h"
+#include "anLogger/src/anlogger.h"
+#include "shared/commonthings.h"
 
 
 class CanProtocol : public QCanBusFrame
@@ -48,8 +48,8 @@ public:
 
 
     static const CanProtocol &PresenceRequest;
-    static const CanProtocol &DataRequest(const quint8 &sdcsid);
-    static const CanProtocol &PresenceResponse(const quint8 &sdcsid);
+    static const CanProtocol DataRequest(const quint8 &sdcsid);
+    static const CanProtocol PresenceResponse(const quint8 &sdcsid);
 };
 
 #endif // CANPROTOCOL_H

@@ -243,13 +243,13 @@ bool CanProtocol::getValveControlResetBit() const
 
 const CanProtocol &CanProtocol::PresenceRequest = CanProtocol(0xf0,".");
 
-const CanProtocol &CanProtocol::DataRequest(const quint8 &sdcsid)
+const CanProtocol CanProtocol::DataRequest(const quint8 &sdcsid)
 {
     CanProtocol tmpReturn;
     return tmpReturn.setSdcsId(sdcsid).makeDataRequest();
 }
 
-const CanProtocol &CanProtocol::PresenceResponse(const quint8 &sdcsid)
+const CanProtocol CanProtocol::PresenceResponse(const quint8 &sdcsid)
 {
     CanProtocol tmpReturn;
     return tmpReturn.setSdcsId(sdcsid).makePresenceResponse();

@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui serialbus
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialbus
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += -std=c++11 console
-TARGET = CanSimulatorExec
+TARGET = CanSimulator
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,37 +26,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    canprotocol.cpp \
-    CanBusWorker/canbusworker.cpp \
-    CanBusWorker/canbusworkerdb.cpp \
-    CanBusWorker/connectdevice.cpp \
-    CanBusWorker/createdevice.cpp \
-    CanBusWorker/deviceconnected.cpp \
-    CanBusWorker/directtransition.cpp \
-    CanBusWorker/framesent.cpp \
-    CanBusWorker/readframe.cpp \
-    CanBusWorker/waitforerrorhandler.cpp \
-    CanBusWorker/waitforpluginandinterface.cpp \
-    CanBusWorker/writeframe.cpp \
-    CanBusWorker/writeaframe.cpp
+    anLogger/src/anlogger.cpp \
+    CanProtocol/src/canprotocol.cpp \
+    shared/abstractstatemachinebasis.cpp \
+    shared/commonthings.cpp \
+    shared/directtransition.cpp \
+    CanBusWorker/src/canbusworker.cpp \
+    CanBusWorker/src/canbusworkerbasis.cpp \
+    CanBusWorker/src/errorcanbusworker.cpp \
+    CanBusWorker/src/frameiswritten.cpp \
+    CanBusWorker/src/idlecanbusworker.cpp \
+    CanBusWorker/src/runningcanbusworker.cpp \
+    CanBusWorker/src/uninitiatedcanbusworker.cpp \
+    CanBusWorker/src/writeframecanbusworker.cpp
 
 HEADERS += \
         mainwindow.h \
-    anlogger.h \
-    canprotocol.h \
-    commonthings.h \
-    CanBusWorker/canbusworker.h \
-    CanBusWorker/canbusworkerdb.h \
-    CanBusWorker/connectdevice.h \
-    CanBusWorker/createdevice.h \
-    CanBusWorker/deviceconnected.h \
-    CanBusWorker/directtransition.h \
-    CanBusWorker/framesent.h \
-    CanBusWorker/readframe.h \
-    CanBusWorker/waitforerrorhandler.h \
-    CanBusWorker/waitforpluginandinterface.h \
-    CanBusWorker/writeframe.h \
-    CanBusWorker/writeaframe.h
+    anLogger/src/anlogger.h \
+    CanProtocol/src/canprotocol.h \
+    shared/abstractstatemachinebasis.h \
+    shared/commonthings.h \
+    shared/directtransition.h \
+    CanBusWorker/src/canbusworker.h \
+    CanBusWorker/src/canbusworkerbasis.h \
+    CanBusWorker/src/errorcanbusworker.h \
+    CanBusWorker/src/frameiswritten.h \
+    CanBusWorker/src/idlecanbusworker.h \
+    CanBusWorker/src/runningcanbusworker.h \
+    CanBusWorker/src/uninitiatedcanbusworker.h \
+    CanBusWorker/src/writeframecanbusworker.h
 
 FORMS += \
         mainwindow.ui
