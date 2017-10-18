@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QThread * aThread = new QThread();
     CanBusWorker * aCommunicator = new CanBusWorker();
-    aCommunicator->setObjectName(QStringLiteral(""));
+    aCommunicator->setObjectName(CanBusWorkerObjName);
     aCommunicator->moveToThread(aThread);
     QObject::connect(aCommunicator, &CanBusWorker::Out, this, &MainWindow::FromCanBusWorker,
                      uniqueQtConnectionType);

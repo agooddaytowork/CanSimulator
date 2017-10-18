@@ -1,6 +1,6 @@
 #ifndef CANPROTOCOL_H
 #define CANPROTOCOL_H
-#define CanPtcDbgEn 1
+#define CanPtcDbgEn 0
 
 #include <QCanBusFrame>
 #include <QByteArray>
